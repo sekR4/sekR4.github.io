@@ -11,7 +11,7 @@
 export PROJECT_ID=<YOUR_UNIQUE_LOWER_CASE_PROJECT_ID> export BILLING_ACCOUNT_ID=<YOUR_BILLING_ACCOUNT_ID> export APP=myapp export PORT=1234 export REGION=&#34;europe-west3&#34; export TAG=&#34;gcr.">
 <meta name=author content>
 <link rel=canonical href=https://sekr4.github.io/posts/fastapi-on-google-cloud-run/>
-<link crossorigin=anonymous href=/assets/css/stylesheet.min.7dcc9306fbb10f6c6a62b3a5eac0407ea862f0f552079554bedafb827a242ad6.css integrity="sha256-fcyTBvuxD2xqYrOl6sBAfqhi8PVSB5VUvtr7gnokKtY=" rel="preload stylesheet" as=style>
+<link crossorigin=anonymous href=/assets/css/stylesheet.min.c21dcf8f9e724152105104443fc7bbc8fcb8a7d3889f2941707f857c17319b9c.css integrity="sha256-wh3Pj55yQVIQUQREP8e7yPy4p9OInylBcH+FfBcxm5w=" rel="preload stylesheet" as=style>
 <link rel=icon href=https://sekr4.github.io/favicon.ico>
 <link rel=icon type=image/png sizes=16x16 href=https://sekr4.github.io/favicon-16x16.png>
 <link rel=icon type=image/png sizes=32x32 href=https://sekr4.github.io/favicon-32x32.png>
@@ -21,7 +21,7 @@ export PROJECT_ID=<YOUR_UNIQUE_LOWER_CASE_PROJECT_ID> export BILLING_ACCOUNT_ID=
 <meta name=msapplication-TileColor content="#2e2e33">
 <noscript>
 <style>#theme-toggle,.top-link{display:none}</style>
-</noscript><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/atom-one-dark.min.css integrity="sha512-Jk4AqjWsdSzSWCSuQTfYRIF84Rq/eV0G2+tu07byYwHcbTGfdmLrHjUSwvzp5HvbiqK4ibmNwdcG49Y5RGYPTg==" crossorigin=anonymous referrerpolicy=no-referrer><meta property="og:title" content="Deploying a FastAPI app on Google Cloud Run">
+</noscript><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/default.min.css integrity="sha512-hasIneQUHlh06VNBe7f6ZcHmeRTLIaQWFd43YriJ0UND19bvYRauxthDg8E4eVNPm9bRUhr5JGeqH7FRFXQu5g==" crossorigin=anonymous referrerpolicy=no-referrer><meta property="og:title" content="Deploying a FastAPI app on Google Cloud Run">
 <meta property="og:description" content="This is a very simple hello-world-walkthrough with FastAPI and Cloud Run. All code snippets described can also be found here.
  Initial Setup To play through this tutorial, I recommend creating a new project. You can do this in the console or with the Cloud SDK (recommended). You can find your billing account id here.
  Create your new project.
@@ -80,93 +80,93 @@ Deploying a FastAPI app on Google Cloud Run
 <p>To play through this tutorial, I recommend creating a new project. You can do this in the console or <a href=https://cloud.google.com/sdk/gcloud/reference/projects/create>with the Cloud SDK</a> (recommended). You can find your billing account id <a href=https://console.cloud.google.com/billing>here</a>.</p>
 <p> </p>
 <p>Create your new project.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>export PROJECT_ID<span style=color:#f92672>=</span>&lt;YOUR_UNIQUE_LOWER_CASE_PROJECT_ID&gt;
-export BILLING_ACCOUNT_ID<span style=color:#f92672>=</span>&lt;YOUR_BILLING_ACCOUNT_ID&gt;
-export APP<span style=color:#f92672>=</span>myapp 
-export PORT<span style=color:#f92672>=</span><span style=color:#ae81ff>1234</span>
-export REGION<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;europe-west3&#34;</span>
-export TAG<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;gcr.io/</span>$PROJECT_ID<span style=color:#e6db74>/</span>$APP<span style=color:#e6db74>&#34;</span>
+<div class=highlight><pre tabindex=0 style=color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#81a1c1>export</span> PROJECT_ID<span style=color:#81a1c1>=</span>&lt;YOUR_UNIQUE_LOWER_CASE_PROJECT_ID&gt;
+<span style=color:#81a1c1>export</span> BILLING_ACCOUNT_ID<span style=color:#81a1c1>=</span>&lt;YOUR_BILLING_ACCOUNT_ID&gt;
+<span style=color:#81a1c1>export</span> APP<span style=color:#81a1c1>=</span>myapp 
+<span style=color:#81a1c1>export</span> PORT<span style=color:#81a1c1>=</span><span style=color:#b48ead>1234</span>
+<span style=color:#81a1c1>export</span> REGION<span style=color:#81a1c1>=</span><span style=color:#a3be8c>&#34;europe-west3&#34;</span>
+<span style=color:#81a1c1>export</span> TAG<span style=color:#81a1c1>=</span><span style=color:#a3be8c>&#34;gcr.io/</span>$PROJECT_ID<span style=color:#a3be8c>/</span>$APP<span style=color:#a3be8c>&#34;</span>
 
-gcloud projects create $PROJECT_ID --name<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;My FastAPI App&#34;</span>
+gcloud projects create $PROJECT_ID --name<span style=color:#81a1c1>=</span><span style=color:#a3be8c>&#34;My FastAPI App&#34;</span>
 
-<span style=color:#75715e># Set Default Project (all later commands will use it) </span>
-gcloud config set project $PROJECT_ID
+<span style=color:#616e87;font-style:italic># Set Default Project (all later commands will use it) </span>
+gcloud config <span style=color:#81a1c1>set</span> project $PROJECT_ID
 
-<span style=color:#75715e># Add Billing Account (no free lunch^^)</span>
-gcloud beta billing projects link $PROJECT_ID --billing-account<span style=color:#f92672>=</span>$BILLING_ACCOUNT_ID
+<span style=color:#616e87;font-style:italic># Add Billing Account (no free lunch^^)</span>
+gcloud beta billing projects link $PROJECT_ID --billing-account<span style=color:#81a1c1>=</span>$BILLING_ACCOUNT_ID
 </code></pre></div><p> </p>
 <p>Enable the services you need.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>gcloud services enable cloudbuild.googleapis.com <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>    containerregistry.googleapis.com <span style=color:#ae81ff>\
-</span><span style=color:#ae81ff></span>    run.googleapis.com
+<div class=highlight><pre tabindex=0 style=color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>gcloud services <span style=color:#81a1c1>enable</span> cloudbuild.googleapis.com <span style=color:#ebcb8b>\
+</span><span style=color:#ebcb8b></span>    containerregistry.googleapis.com <span style=color:#ebcb8b>\
+</span><span style=color:#ebcb8b></span>    run.googleapis.com
 </code></pre></div><p> </p>
 <h2 id=simple-hello-world-app>Simple Hello World App<a hidden class=anchor aria-hidden=true href=#simple-hello-world-app>#</a></h2>
 <p>Let&rsquo;s keep it bloody simple and focus on the general process. This is a our hello world app <code>src/main.py</code>.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#f92672>from</span> fastapi <span style=color:#f92672>import</span> FastAPI
+<div class=highlight><pre tabindex=0 style=color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#81a1c1;font-weight:700>from</span> <span style=color:#8fbcbb>fastapi</span> <span style=color:#81a1c1;font-weight:700>import</span> FastAPI
 
-app <span style=color:#f92672>=</span> FastAPI()
+app <span style=color:#81a1c1>=</span> FastAPI<span style=color:#eceff4>()</span>
 
 
-<span style=color:#a6e22e>@app</span><span style=color:#f92672>.</span>get(<span style=color:#e6db74>&#34;/&#34;</span>)
-<span style=color:#66d9ef>async</span> <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>root</span>():
-    <span style=color:#66d9ef>return</span> {<span style=color:#e6db74>&#34;message&#34;</span>: <span style=color:#e6db74>&#34;Hello World&#34;</span>}
+<span style=color:#d08770>@app</span><span style=color:#81a1c1>.</span>get<span style=color:#eceff4>(</span><span style=color:#a3be8c>&#34;/&#34;</span><span style=color:#eceff4>)</span>
+<span style=color:#81a1c1;font-weight:700>async</span> <span style=color:#81a1c1;font-weight:700>def</span> <span style=color:#88c0d0>root</span><span style=color:#eceff4>():</span>
+    <span style=color:#81a1c1;font-weight:700>return</span> <span style=color:#eceff4>{</span><span style=color:#a3be8c>&#34;message&#34;</span><span style=color:#eceff4>:</span> <span style=color:#a3be8c>&#34;Hello World&#34;</span><span style=color:#eceff4>}</span>
 </code></pre></div><p> </p>
 <p>If you want to test it locally, run:</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>pip install -r src/requirements.txt
-cd src 
+<div class=highlight><pre tabindex=0 style=color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>pip install -r src/requirements.txt
+<span style=color:#81a1c1>cd</span> src 
 uvicorn main:app --reload
 </code></pre></div><p> </p>
 <p>You can check the output in your browser by opening http://127.0.0.1:1234 or &ldquo;curling&rdquo; the app in another terminal tab via:</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>curl http://127.0.0.1:$PORT
+<div class=highlight><pre tabindex=0 style=color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>curl http://127.0.0.1:$PORT
 </code></pre></div><p>As a response you&rsquo;ll see <code>{"message":"Hello World"}</code>.</p>
 <p> </p>
 <h2 id=app-into-docker>App into Docker<a hidden class=anchor aria-hidden=true href=#app-into-docker>#</a></h2>
 <p>You need to put your app into an image before deploying it. Here you see an example docker file. Note that you should use a PORT as environment variable. If you don&rsquo;t you&rsquo;ll get an error like <code>Cloud Run error: The user-provided container failed to start and listen on the port defined provided by the PORT=8080 environment variable.</code></p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-docker data-lang=docker><span style=color:#66d9ef>FROM</span><span style=color:#e6db74> python:3.9-slim@sha256:980b778550c0d938574f1b556362b27601ea5c620130a572feb63ac1df03eda5 </span><span style=color:#960050;background-color:#1e0010>
-</span><span style=color:#960050;background-color:#1e0010>
-</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>ENV</span> PYTHONUNBUFFERED True<span style=color:#960050;background-color:#1e0010>
-</span><span style=color:#960050;background-color:#1e0010>
-</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>ENV</span> APP_HOME /app<span style=color:#960050;background-color:#1e0010>
-</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>WORKDIR</span><span style=color:#e6db74> $APP_HOME</span><span style=color:#960050;background-color:#1e0010>
-</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>COPY</span> . ./<span style=color:#960050;background-color:#1e0010>
-</span><span style=color:#960050;background-color:#1e0010>
-</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>ENV</span> PORT <span style=color:#ae81ff>1234</span><span style=color:#960050;background-color:#1e0010>
-</span><span style=color:#960050;background-color:#1e0010>
-</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>RUN</span> pip install --no-cache-dir -r requirements.txt<span style=color:#960050;background-color:#1e0010>
-</span><span style=color:#960050;background-color:#1e0010>
-</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#75715e># As an example here we&#39;re running the web service with one worker on uvicorn.</span><span style=color:#960050;background-color:#1e0010>
-</span><span style=color:#960050;background-color:#1e0010></span><span style=color:#66d9ef>CMD</span> exec uvicorn main:app --host 0.0.0.0 --port <span style=color:#e6db74>${</span>PORT<span style=color:#e6db74>}</span> --workers <span style=color:#ae81ff>1</span><span style=color:#960050;background-color:#1e0010>
+<div class=highlight><pre tabindex=0 style=color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-docker data-lang=docker><span style=color:#81a1c1;font-weight:700>FROM</span><span style=color:#a3be8c> python:3.9-slim@sha256:980b778550c0d938574f1b556362b27601ea5c620130a572feb63ac1df03eda5 </span><span style=color:#bf616a>
+</span><span style=color:#bf616a>
+</span><span style=color:#bf616a></span><span style=color:#81a1c1;font-weight:700>ENV</span> PYTHONUNBUFFERED True<span style=color:#bf616a>
+</span><span style=color:#bf616a>
+</span><span style=color:#bf616a></span><span style=color:#81a1c1;font-weight:700>ENV</span> APP_HOME /app<span style=color:#bf616a>
+</span><span style=color:#bf616a></span><span style=color:#81a1c1;font-weight:700>WORKDIR</span><span style=color:#a3be8c> $APP_HOME</span><span style=color:#bf616a>
+</span><span style=color:#bf616a></span><span style=color:#81a1c1;font-weight:700>COPY</span> . ./<span style=color:#bf616a>
+</span><span style=color:#bf616a>
+</span><span style=color:#bf616a></span><span style=color:#81a1c1;font-weight:700>ENV</span> PORT <span style=color:#b48ead>1234</span><span style=color:#bf616a>
+</span><span style=color:#bf616a>
+</span><span style=color:#bf616a></span><span style=color:#81a1c1;font-weight:700>RUN</span> pip install --no-cache-dir -r requirements.txt<span style=color:#bf616a>
+</span><span style=color:#bf616a>
+</span><span style=color:#bf616a></span><span style=color:#616e87;font-style:italic># As an example here we&#39;re running the web service with one worker on uvicorn.</span><span style=color:#bf616a>
+</span><span style=color:#bf616a></span><span style=color:#81a1c1;font-weight:700>CMD</span> <span style=color:#81a1c1>exec</span> uvicorn main:app --host 0.0.0.0 --port <span style=color:#a3be8c>${</span>PORT<span style=color:#a3be8c>}</span> --workers <span style=color:#b48ead>1</span><span style=color:#bf616a>
 </span></code></pre></div><p> </p>
 <p>To try your app locally with docker simply run inside <code>src</code>:</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>docker build -t $TAG .
-docker run -dp $PORT:$PORT -e PORT<span style=color:#f92672>=</span>$PORT $TAG
+<div class=highlight><pre tabindex=0 style=color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>docker build -t $TAG .
+docker run -dp $PORT:$PORT -e PORT<span style=color:#81a1c1>=</span>$PORT $TAG
 </code></pre></div><p> </p>
 <p>Again you can check it in your browser our curl it:</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash> curl http://127.0.0.1:$PORT
+<div class=highlight><pre tabindex=0 style=color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash> curl http://127.0.0.1:$PORT
 </code></pre></div><p> </p>
 <h2 id=deployment>Deployment<a hidden class=anchor aria-hidden=true href=#deployment>#</a></h2>
 <p>If everything worked out so far, we&rsquo;re ready to deploy our app. First we create a Google Cloud Build. Maybe it&rsquo;s similar to pushing a docker image to a docker registry.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>gcloud builds submit --tag $TAG
+<div class=highlight><pre tabindex=0 style=color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>gcloud builds submit --tag $TAG
 </code></pre></div><p>After this is done, well it&rsquo;s finally time to deploy your cloud run app :).</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>gcloud run deploy $APP --image $TAG --platform managed --region $REGION --allow-unauthenticated
+<div class=highlight><pre tabindex=0 style=color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>gcloud run deploy $APP --image $TAG --platform managed --region $REGION --allow-unauthenticated
 </code></pre></div><p> </p>
 <h2 id=test-it>Test it<a hidden class=anchor aria-hidden=true href=#test-it>#</a></h2>
 <p>Note, this may take some minutes. The URL of your app will show up in the terminal. But you can also check your app via:</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># See all info about the app</span>
+<div class=highlight><pre tabindex=0 style=color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#616e87;font-style:italic># See all info about the app</span>
 gcloud run services describe $APP --region $REGION
 </code></pre></div><p>Note, even though we&rsquo;ve chosen a random port like <code>1234</code>, the deployed service will use <code>8080</code> by default. This is why we need <code>--port ${PORT}</code> in the last line of our Dockerfile.</p>
 <p>Let&rsquo;s send a request to our app.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># get url</span>
-URL<span style=color:#f92672>=</span><span style=color:#66d9ef>$(</span>gcloud run services describe $APP --region $REGION --format <span style=color:#e6db74>&#39;value(status.url)&#39;</span><span style=color:#66d9ef>)</span>
+<div class=highlight><pre tabindex=0 style=color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#616e87;font-style:italic># get url</span>
+URL<span style=color:#81a1c1>=</span><span style=color:#81a1c1;font-weight:700>$(</span>gcloud run services describe $APP --region $REGION --format <span style=color:#a3be8c>&#39;value(status.url)&#39;</span><span style=color:#81a1c1;font-weight:700>)</span>
 
 curl $URL
 </code></pre></div><p>Perfect! Again, we receive <code>{"message":"Hello World"}</code>.</p>
 <p> </p>
 <h2 id=clean-up>Clean up<a hidden class=anchor aria-hidden=true href=#clean-up>#</a></h2>
 <p>If you don&rsquo;t need the app anymore remove it. (You may also delete the whole project instead.)</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>gcloud run services delete $APP --region $REGION
+<div class=highlight><pre tabindex=0 style=color:#d8dee9;background-color:#2e3440;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>gcloud run services delete $APP --region $REGION
 
-<span style=color:#75715e># Check if it disAPPeared (optional)</span>
+<span style=color:#616e87;font-style:italic># Check if it disAPPeared (optional)</span>
 gcloud run services list
 </code></pre></div>
 </div>
